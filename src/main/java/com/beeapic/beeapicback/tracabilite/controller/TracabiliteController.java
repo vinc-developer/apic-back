@@ -31,7 +31,7 @@ public class TracabiliteController {
             TracabiliteDto tracabiliteDto = tracabiliteService.getTracabilites(id);
             return ResponseEntity.ok(tracabiliteDto);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Une erreur c'est produite durant la récupération des données.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
         }
     }
 }

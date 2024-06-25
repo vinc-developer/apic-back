@@ -4,7 +4,10 @@ import com.beeapic.beeapicback.apiculture.dto.RecolteDto;
 import com.beeapic.beeapicback.entity.Recolte;
 import com.beeapic.beeapicback.apiculture.service.RecolteService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/apiculture/recolte")
@@ -22,8 +25,13 @@ public class RecolteController {
      * @return Recolte
      */
     @PostMapping("/create")
-    public Recolte createRecolte(@Valid @RequestBody Recolte recolte) {
-        return recolteService.createRecolte(recolte);
+    public ResponseEntity<Recolte> createRecolte(@Valid @RequestBody Recolte recolte) {
+        try {
+            Recolte recolteCreate = recolteService.createRecolte(recolte);
+            return ResponseEntity.ok(recolteCreate);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
+        }
     }
 
     /**
@@ -32,7 +40,12 @@ public class RecolteController {
      * @return RecolteDto
      */
     @GetMapping("/{id}")
-    public RecolteDto getRecolte(@PathVariable Long id) {
-        return recolteService.getRecolte(id);
+    public ResponseEntity<RecolteDto> getRecolte(@PathVariable Long id) {
+        try {
+            RecolteDto recolte = recolteService.getRecolte(id);
+            return ResponseEntity.ok(recolte);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
+        }
     }
 }

@@ -4,7 +4,10 @@ import com.beeapic.beeapicback.apiculture.dto.RucherDto;
 import com.beeapic.beeapicback.entity.Rucher;
 import com.beeapic.beeapicback.apiculture.service.RucherService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/apiculture/rucher")
@@ -22,8 +25,13 @@ public class RucherController {
      * @return Rucher
      */
     @PostMapping("/create")
-    public Rucher createRucher(@Valid @RequestBody Rucher rucher) {
-        return rucherService.createRucher(rucher);
+    public ResponseEntity<Rucher> createRucher(@Valid @RequestBody Rucher rucher) {
+        try {
+            Rucher rucherCreate = rucherService.createRucher(rucher);
+            return ResponseEntity.ok(rucherCreate);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
+        }
     }
 
     /**
@@ -32,7 +40,12 @@ public class RucherController {
      * @return RucherDto
      */
     @GetMapping("/{id}")
-    public RucherDto getRucher(@PathVariable Long id) {
-        return rucherService.getRucher(id);
+    public ResponseEntity<RucherDto> getRucher(@PathVariable Long id) {
+        try {
+            RucherDto rucher = rucherService.getRucher(id);
+            return ResponseEntity.ok(rucher);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
+        }
     }
 }

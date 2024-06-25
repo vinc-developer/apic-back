@@ -1,6 +1,5 @@
 package com.beeapic.beeapicback.vente.service;
 
-import com.beeapic.beeapicback.entity.Product;
 import com.beeapic.beeapicback.entity.ProductMiel;
 import com.beeapic.beeapicback.vente.dto.ProductMielDto;
 import com.beeapic.beeapicback.vente.interfaces.ProductInterface;
@@ -33,7 +32,7 @@ public class ProductMielService implements ProductInterface {
      * @return ProductDto
      */
     public ProductMielDto getProduct(Long id) {
-        ProductMiel product = productMielRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        ProductMiel product = productMielRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR));
         return mapperProduct(product);
     }
 

@@ -4,7 +4,10 @@ import com.beeapic.beeapicback.apiculture.dto.ApiculteurDto;
 import com.beeapic.beeapicback.entity.Apiculteur;
 import com.beeapic.beeapicback.apiculture.service.ApiculteurService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/apiculture/apiculteur")
@@ -22,8 +25,13 @@ public class ApiculteurController {
      * @return ApiculteurDto
      */
     @GetMapping("/{id}")
-    public ApiculteurDto getApiculteur(@PathVariable Long id) {
-        return apiculteurService.getApiculteur(id);
+    public ResponseEntity<ApiculteurDto> getApiculteur(@PathVariable Long id) {
+        try {
+            ApiculteurDto api = apiculteurService.getApiculteur(id);
+            return ResponseEntity.ok(api);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
+        }
     }
 
     /**
@@ -32,7 +40,12 @@ public class ApiculteurController {
      * @return Apiculteur
      */
     @PostMapping("/create")
-    public Apiculteur createApiculteur(@Valid @RequestBody Apiculteur apiculteur) {
-        return apiculteurService.createApiculteur(apiculteur);
+    public ResponseEntity<Apiculteur> createApiculteur(@Valid @RequestBody Apiculteur apiculteur) {
+        try {
+            Apiculteur apiculteurCreate = apiculteurService.createApiculteur(apiculteur);
+            return ResponseEntity.ok(apiculteurCreate);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
+        }
     }
 }

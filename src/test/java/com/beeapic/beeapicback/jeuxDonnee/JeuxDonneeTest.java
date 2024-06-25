@@ -7,6 +7,8 @@ import com.beeapic.beeapicback.apiculture.dto.RucherDto;
 import com.beeapic.beeapicback.entity.*;
 import com.beeapic.beeapicback.tracabilite.dto.TracabiliteDto;
 import com.beeapic.beeapicback.vente.dto.ProductMielDto;
+import com.beeapic.beeapicback.vente.dto.VenteAllProductDto;
+import com.beeapic.beeapicback.vente.dto.VenteProductMielDto;
 
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -84,6 +86,13 @@ public class JeuxDonneeTest {
         return adresse;
     }
 
+    public Vente getNewVente(Long id, Double price) {
+        Vente vente = new Vente();
+        vente.setId(id);
+        vente.setTotalprice(price);
+        return vente;
+    }
+
     public List<Recolte> getListRecolte() throws ParseException {
         List<Recolte> recolteList = new ArrayList<>();
         recolteList.add( getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L) );
@@ -124,5 +133,36 @@ public class JeuxDonneeTest {
         tracabiliteDto.setRucher(new RucherDto(3L, "Rucher du petit bois", "Bois", new Adresse(), 1L));
         tracabiliteDto.setApiculteur( new ApiculteurDto() );
         return tracabiliteDto;
+    }
+
+    public ProductMielDto getProductMiel(Long id, Double price, Long poids, Long quantityProduct, Long quantityVendu, Long recolteId) throws ParseException {
+        ProductMielDto newProduct = new ProductMielDto();
+        newProduct.setId(id);
+        newProduct.setPrice(price);
+        newProduct.setPoids(poids);
+        newProduct.setQuantitetotalpot(quantityProduct);
+        newProduct.setQuantitevendupot(quantityVendu);
+        newProduct.setRecolteId(recolteId);
+        return newProduct;
+    }
+
+    public VenteAllProductDto getVenteAllProduct() throws ParseException {
+        VenteAllProductDto venteAllProductDto = new VenteAllProductDto();
+        venteAllProductDto.setVente(getNewVente(2L, 19.50));
+
+        List<VenteProductMielDto> listProduct = new ArrayList<>();
+
+        VenteProductMielDto product1 = new VenteProductMielDto();
+        product1.setProduct(getNewProduct(79L, 7.50, 500L, 1000L, 780L));
+        product1.setQuantity(2L);
+        listProduct.add(product1);
+
+        VenteProductMielDto product2 = new VenteProductMielDto();
+        product2.setQuantity(1L);
+        product2.setProduct(getNewProduct(53L, 4.50, 250L, 1500L, 550L));
+        listProduct.add(product2);
+
+        venteAllProductDto.setListProduct(listProduct);
+        return venteAllProductDto;
     }
 }

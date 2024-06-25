@@ -32,7 +32,7 @@ public class RucheController {
             Ruche createRuche = rucheService.createRuche(ruche);
             return ResponseEntity.ok(createRuche);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Une erreur c'est produite durant la création des données.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
         }
     }
 
@@ -47,7 +47,7 @@ public class RucheController {
             RucheDto ruche = rucheService.getRuche(id);
             return ResponseEntity.ok(ruche);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Une erreur c'est produite durant la récupération des données.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
         }
     }
 }
