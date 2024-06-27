@@ -30,7 +30,7 @@ public class JeuxDonneeTest {
         return newRuche;
     }
 
-    public Rucher getNewRucher(Long id, String name, String environnement) throws ParseException {
+    public Rucher getNewRucher(Long id, String name, String environnement) {
         Rucher newRucher = new Rucher();
         newRucher.setId(id);
         newRucher.setName(name);
@@ -109,7 +109,7 @@ public class JeuxDonneeTest {
         return  rucheList;
     }
 
-    public List<Rucher> getListRucher() throws ParseException {
+    public List<Rucher> getListRucher() {
         List<Rucher> rucherList = new ArrayList<>();
         rucherList.add( getNewRucher(3L, "Rucher du petit bois", "Bois") );
         rucherList.add( getNewRucher(1L, "Rucher Marais", "Marais") );
@@ -135,7 +135,7 @@ public class JeuxDonneeTest {
         return tracabiliteDto;
     }
 
-    public ProductMielDto getProductMiel(Long id, Double price, Long poids, Long quantityProduct, Long quantityVendu, Long recolteId) throws ParseException {
+    public ProductMielDto getProductMiel(Long id, Double price, Long poids, Long quantityProduct, Long quantityVendu, Long recolteId) {
         ProductMielDto newProduct = new ProductMielDto();
         newProduct.setId(id);
         newProduct.setPrice(price);
@@ -149,7 +149,11 @@ public class JeuxDonneeTest {
     public VenteAllProductDto getVenteAllProduct() throws ParseException {
         VenteAllProductDto venteAllProductDto = new VenteAllProductDto();
         venteAllProductDto.setVente(getNewVente(2L, 19.50));
+        venteAllProductDto.setListProduct(getListVenteProductMielDto());
+        return venteAllProductDto;
+    }
 
+    public List<VenteProductMielDto> getListVenteProductMielDto() throws ParseException {
         List<VenteProductMielDto> listProduct = new ArrayList<>();
 
         VenteProductMielDto product1 = new VenteProductMielDto();
@@ -162,7 +166,50 @@ public class JeuxDonneeTest {
         product2.setProduct(getNewProduct(53L, 4.50, 250L, 1500L, 550L));
         listProduct.add(product2);
 
-        venteAllProductDto.setListProduct(listProduct);
-        return venteAllProductDto;
+        return listProduct;
+    }
+
+    public RucheDto getRucheDto(Long id, String name, String beeType, String typeRuche, Long idRucher) {
+        RucheDto newRuche = new RucheDto();
+        newRuche.setId(id);
+        newRuche.setName(name);
+        newRuche.setBeetype(beeType);
+        newRuche.setTyperuche(typeRuche);
+        newRuche.setRucherId(idRucher);
+        return newRuche;
+    }
+
+    public RucherDto getRucherDto(Long id, String name, String environnement, Long apiculteurId) {
+        RucherDto newRucher = new RucherDto();
+        newRucher.setId(id);
+        newRucher.setName(name);
+        newRucher.setEnvironnement(environnement);
+        newRucher.setApiculteurId(apiculteurId);
+        newRucher.setAdresse( getNewAdresse() );
+        return newRucher;
+    }
+
+    public RecolteDto getRecolteDto(Long id, String name, LocalDate date, Long quantity, Long rucheId) {
+        RecolteDto newRecolte = new RecolteDto();
+        newRecolte.setId(id);
+        newRecolte.setName(name);
+        newRecolte.setRecoltedate(date);
+        newRecolte.setRecoltekg(quantity);
+        newRecolte.setRucheId(rucheId);
+        return newRecolte;
+    }
+
+    public ApiculteurDto getApiculteurDto() {
+        ApiculteurDto newApiculteur = new ApiculteurDto();
+        newApiculteur.setId(1L);
+        newApiculteur.setFirstname("Alain");
+        newApiculteur.setLastname("Terrieur");
+        newApiculteur.setAdresse( getNewAdresse() );
+        newApiculteur.setSiret("123456a456");
+        newApiculteur.setNapi("AP123456");
+        newApiculteur.setEmail("test@test.com");
+        newApiculteur.setTelephone("0606060606");
+        newApiculteur.setPassword("Azerty123");
+        return newApiculteur;
     }
 }

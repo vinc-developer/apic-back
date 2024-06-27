@@ -28,7 +28,7 @@ public class VenteController {
      * @return Vente
      */
     @PostMapping("/create")
-    public ResponseEntity<Vente> createVente(@Valid List<VenteProductMielDto> listVentes) {
+    public ResponseEntity<Vente> createVente(@Valid @RequestBody List<VenteProductMielDto> listVentes) {
         try {
             Vente vente = venteService.createVente(listVentes);
             return ResponseEntity.ok(vente);
