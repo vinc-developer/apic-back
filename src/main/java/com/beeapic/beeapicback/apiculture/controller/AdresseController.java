@@ -32,7 +32,7 @@ public class AdresseController {
             Adresse address = adresseService.createAdresse(adresse);
             return ResponseEntity.ok(address);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
         }
     }
 }

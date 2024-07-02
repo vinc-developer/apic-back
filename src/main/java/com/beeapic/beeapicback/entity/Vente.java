@@ -22,6 +22,6 @@ public class Vente {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotBlank
+    @NotNull
     private Double totalprice;
 }

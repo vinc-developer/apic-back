@@ -1,4 +1,8 @@
 package com.beeapic.beeapicback.apiculture.service;
 
-public class RucherServiceTest {
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class RucherServiceTest {
 }

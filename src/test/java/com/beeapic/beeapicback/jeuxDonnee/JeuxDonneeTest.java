@@ -117,14 +117,6 @@ public class JeuxDonneeTest {
         return rucherList;
     }
 
-    public List<Product> getListProduct() throws ParseException {
-        List<Product> productList = new ArrayList<>();
-        productList.add( getNewProduct(79L, 7.50, 500L, 1000L, 780L) );
-        productList.add( getNewProduct(15L, 13.00, 1000L, 500L, 280L) );
-        productList.add( getNewProduct(53L, 4.50, 250L, 1500L, 550L) );
-        return productList;
-    }
-
     public TracabiliteDto getTracabiliteDto(Long id) {
         TracabiliteDto tracabiliteDto = new TracabiliteDto();
         tracabiliteDto.setProduct(new ProductMielDto(id, 7.50, 500L, 1000L, 780L, 9L));
@@ -151,6 +143,26 @@ public class JeuxDonneeTest {
         venteAllProductDto.setVente(getNewVente(2L, 19.50));
         venteAllProductDto.setListProduct(getListVenteProductMielDto());
         return venteAllProductDto;
+    }
+
+    public List<VentesProductMiel> getListVenteProductMiel() throws ParseException {
+        List<VentesProductMiel> listProduct = new ArrayList<>();
+
+        VentesProductMiel product1 = new VentesProductMiel();
+        product1.setId(new VentesProductMielKey());
+        product1.setProduct(getNewProduct(53L, 4.50, 250L, 1500L, 550L));
+        product1.setVente(getNewVente(100L, 19.50));
+        product1.setQuantity(2L);
+        listProduct.add(product1);
+
+        VentesProductMiel product2 = new VentesProductMiel();
+        product2.setId(new VentesProductMielKey());
+        product2.setProduct(getNewProduct(79L, 7.50, 500L, 1000L, 780L));
+        product2.setVente(getNewVente(100L, 19.50));
+        product2.setQuantity(1L);
+        listProduct.add(product2);
+
+        return listProduct;
     }
 
     public List<VenteProductMielDto> getListVenteProductMielDto() throws ParseException {
@@ -199,9 +211,9 @@ public class JeuxDonneeTest {
         return newRecolte;
     }
 
-    public ApiculteurDto getApiculteurDto() {
+    public ApiculteurDto getApiculteurDto(Long id) {
         ApiculteurDto newApiculteur = new ApiculteurDto();
-        newApiculteur.setId(1L);
+        newApiculteur.setId(id);
         newApiculteur.setFirstname("Alain");
         newApiculteur.setLastname("Terrieur");
         newApiculteur.setAdresse( getNewAdresse() );

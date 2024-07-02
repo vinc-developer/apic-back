@@ -45,7 +45,7 @@ public class VenteService {
             ventesProductMiel.setQuantity(productDto.getQuantity());
             venteProductRepository.save(ventesProductMiel);
 
-            // incrémenter le nombre de produit vendu et save
+            // incrémente le nombre de produit vendu et save
             productDto.getProduct().setQuantitevendupot(productDto.getProduct().getQuantitevendupot() + productDto.getQuantity());
             productMielService.createProduct(productDto.getProduct());
 
@@ -65,16 +65,17 @@ public class VenteService {
      */
     public VenteAllProductDto getVenteAllProduct(Long id) {
         VenteAllProductDto venteProduct = new VenteAllProductDto();
-        Vente vente = venteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Vente vente = venteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR));
         venteProduct.setVente(vente);
+        venteProduct.setListProduct(new ArrayList<>());
 
         List<VentesProductMiel> venteProducts = venteProductRepository.findAllByVente(vente);
+
         venteProducts.forEach((VentesProductMiel venteP) -> {
             VenteProductMielDto venteProductMielDto = new VenteProductMielDto();
             venteProductMielDto.setQuantity(venteP.getQuantity());
             venteProductMielDto.setProduct(venteP.getProduct());
 
-            venteProduct.setListProduct(new ArrayList<>());
             venteProduct.getListProduct().add(venteProductMielDto);
         });
 
