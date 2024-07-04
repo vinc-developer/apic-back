@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdresseServiceTest {
@@ -33,10 +33,11 @@ class AdresseServiceTest {
         //ARRANGE
         Adresse address = jeuxDonnee.getNewAdresse();
         //MOCK
-        when(adresseRepository.save(address)).thenReturn(address);
+        when(adresseRepository.save(any(Adresse.class))).thenReturn(address);
         //ACT
         Adresse addressCreated = sut.createAdresse(address);
         //ASSERT
+        verify(adresseRepository, times(1)).save(any(Adresse.class));
         assertNotNull(addressCreated);
     }
 }
