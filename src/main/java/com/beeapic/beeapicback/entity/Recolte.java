@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,19 +23,23 @@ public class Recolte {
     private Long id;
 
     @NotBlank
-    private String name;
+    private String nomMieler;
 
     //https://thorben-janssen.com/hibernate-jpa-date-and-time/
     @NotNull
-    private LocalDate recoltedate;
+    private LocalDate dateRecolte;
 
     @NotNull
-    private Long recoltekg;
+    private Long qteRecolte;
 
-    @OneToMany(mappedBy = "recolte", cascade = CascadeType.ALL)
-    private List<Product> products;
+    @NotNull
+    private Long qteHausseRecolte;
 
     @ManyToOne
     @JoinColumn(name = "ruche_id", nullable = false)
     private Ruche ruche;
+
+    @ManyToOne
+    @JoinColumn(name = "extraction_id", nullable = false)
+    private Extraction extraction;
 }

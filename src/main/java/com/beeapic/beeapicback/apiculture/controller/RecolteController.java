@@ -21,6 +21,7 @@ public class RecolteController {
 
     /**
      * Api @Get Création d'une récolte de miel
+     *
      * @param recolte
      * @return Recolte
      */
@@ -36,6 +37,7 @@ public class RecolteController {
 
     /**
      * Api @Post Récupération d'une récolte de miel
+     *
      * @param id
      * @return RecolteDto
      */
@@ -48,4 +50,14 @@ public class RecolteController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
         }
     }
+
+    // récupération de toute les récolte d'une ruche
+
+    // récupération de toutes les récoltes d'un rucher
+
+    // récupération de toutes les récoltes d'un apiculteur avec param de date.
+
+    // modifier une récolte
+
+    // supprimer une recolte
 }

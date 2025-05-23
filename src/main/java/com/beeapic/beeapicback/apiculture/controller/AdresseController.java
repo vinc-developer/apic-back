@@ -23,11 +23,12 @@ public class AdresseController {
 
     /**
      * Api @Post Création d'un adresse
+     *
      * @param adresse
      * @return Adresse
      */
     @PostMapping("/create")
-    public ResponseEntity<Adresse> createAdresse(@Valid @RequestBody Adresse adresse){
+    public ResponseEntity<Adresse> createAdresse(@Valid @RequestBody Adresse adresse) {
         try {
             Adresse address = adresseService.createAdresse(adresse);
             return ResponseEntity.ok(address);
@@ -35,4 +36,8 @@ public class AdresseController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
         }
     }
+
+    // récupérer une addresse
+
+    // modifier une adresse
 }

@@ -1,18 +1,12 @@
 package com.beeapic.beeapicback.tracabilite.service;
 
-import com.beeapic.beeapicback.apiculture.repository.ApiculteurRepository;
-import com.beeapic.beeapicback.apiculture.repository.RecolteRepository;
-import com.beeapic.beeapicback.apiculture.repository.RucheRepository;
-import com.beeapic.beeapicback.apiculture.repository.RucherRepository;
-import com.beeapic.beeapicback.apiculture.service.ApiculteurService;
-import com.beeapic.beeapicback.apiculture.service.RecolteService;
-import com.beeapic.beeapicback.apiculture.service.RucheService;
-import com.beeapic.beeapicback.apiculture.service.RucherService;
+import com.beeapic.beeapicback.apiculture.repository.*;
+import com.beeapic.beeapicback.apiculture.service.*;
 import com.beeapic.beeapicback.entity.*;
 import com.beeapic.beeapicback.jeuxDonnee.JeuxDonneeTest;
 import com.beeapic.beeapicback.tracabilite.dto.TracabiliteDto;
-import com.beeapic.beeapicback.vente.repository.ProductMielRepository;
-import com.beeapic.beeapicback.vente.service.ProductMielService;
+import com.beeapic.beeapicback.commerce.repository.ProductRepository;
+import com.beeapic.beeapicback.commerce.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +28,7 @@ class TracabiliteServiceTest {
     private TracabiliteService sut;
 
     @Mock
-    private ProductMielRepository productMielRepository;
+    private ProductRepository productRepository;
     @Mock
     private ApiculteurRepository apiculteurRepository;
     @Mock
@@ -43,16 +37,19 @@ class TracabiliteServiceTest {
     private RucheRepository rucheRepository;
     @Mock
     private RucherRepository rucherRepository;
+    @Mock
+    private ExtractionRepository extractionRepository;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this); // Initialise les mocks
         sut = new TracabiliteService(
-                new ProductMielService(productMielRepository),
+                new ProductService(productRepository),
                 new ApiculteurService(apiculteurRepository),
                 new RecolteService(recolteRepository),
                 new RucheService(rucheRepository),
-                new RucherService(rucherRepository));
+                new RucherService(rucherRepository),
+                new ExtractionService(extractionRepository));
     }
 
     private JeuxDonneeTest jeuxDonnee = new JeuxDonneeTest();
@@ -61,14 +58,16 @@ class TracabiliteServiceTest {
     void getTracabiliteService() throws ParseException {
         //ARRANGE
         Long id = 79L;
-        ProductMiel product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L);
-        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L);
+        Product product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L, "20270525", LocalDate.of(2027,05,25), LocalDate.of(2025,05,25));
+        Extraction extraction = jeuxDonnee.getNewExtraction(5L, LocalDate.of(2025,05,25), "printemps 2025", 500L, 20L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L, 20L);
         Ruche ruche = jeuxDonnee.getNewRuche(55L, "#55", "Noir", "Dadant");
         Rucher rucher = jeuxDonnee.getNewRucher(3L, "Rucher du petit bois", "Bois");
 
         //MOCK
-        when(productMielRepository.findById(id)).thenReturn(Optional.ofNullable(product));
-        when(recolteRepository.findById(product.getRecolte().getId())).thenReturn(Optional.ofNullable(recolte));
+        when(productRepository.findById(id)).thenReturn(Optional.ofNullable(product));
+        when(extractionRepository.findById(product.getExtraction().getId())).thenReturn(Optional.ofNullable(extraction));
+        when(recolteRepository.findById(extraction.getRecoltes().get(0).getId())).thenReturn(Optional.ofNullable(recolte));
         when(rucheRepository.findById(recolte.getRuche().getId())).thenReturn(Optional.ofNullable(ruche));
         when(rucherRepository.findById(ruche.getRucher().getId())).thenReturn(Optional.ofNullable(rucher));
         when(apiculteurRepository.findById(rucher.getApiculteur().getId())).thenReturn(Optional.ofNullable(jeuxDonnee.getNewApiculteur()));
@@ -78,9 +77,9 @@ class TracabiliteServiceTest {
 
         //ASSERT
         assertEquals(result.getProduct().getPoids(), 500L);
-        assertEquals(result.getRecolte().getName(), "Printemps");
-        assertEquals(result.getRuche().getBeetype(), "Noir");
-        assertEquals(result.getRucher().getApiculteurId(), 1L);
+        assertEquals(result.getRecoltes().size(), 1);
+        assertEquals(result.getRuches().size(), 1);
+        assertEquals(result.getRuchers().size(), 1L);
         assertNotNull(result.getApiculteur().getAdresse());
     }
 
@@ -90,7 +89,7 @@ class TracabiliteServiceTest {
         Long id = 79L;
 
         //Mock
-        when(productMielRepository.findById(id)).thenReturn(null);
+        when(productRepository.findById(id)).thenReturn(null);
 
         //ACT & ASSERT
         assertThrows(NullPointerException.class,
@@ -102,11 +101,12 @@ class TracabiliteServiceTest {
     void getTracabiliteServiceNullRecolte() throws ParseException {
         //ARRANGE
         Long id = 79L;
-        ProductMiel product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L);
-
+        Product product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L, "20270525", LocalDate.of(2027,05,25), LocalDate.of(2025,05,25));
+        Extraction extraction = jeuxDonnee.getNewExtraction(5L, LocalDate.of(2025,05,25), "printemps 2025", 500L, 20L);
         //Mock
-        when(productMielRepository.findById(id)).thenReturn(Optional.ofNullable(product));
-        when(recolteRepository.findById(product.getRecolte().getId())).thenReturn(null);
+        when(productRepository.findById(id)).thenReturn(Optional.ofNullable(product));
+        when(extractionRepository.findById(product.getExtraction().getId())).thenReturn(Optional.ofNullable(extraction));
+        when(recolteRepository.findById(extraction.getRecoltes().get(0).getId())).thenReturn(null);
 
         //ACT & ASSERT
         assertThrows(NullPointerException.class,
@@ -118,12 +118,14 @@ class TracabiliteServiceTest {
     void getTracabiliteServiceNullRuche() throws ParseException {
         //ARRANGE
         Long id = 79L;
-        ProductMiel product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L);
-        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L);
+        Product product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L, "20270525", LocalDate.of(2027,05,25), LocalDate.of(2025,05,25));
+        Extraction extraction = jeuxDonnee.getNewExtraction(5L, LocalDate.of(2025,05,25), "printemps 2025", 500L, 20L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L, 20L);
 
         //Mock
-        when(productMielRepository.findById(id)).thenReturn(Optional.ofNullable(product));
-        when(recolteRepository.findById(product.getRecolte().getId())).thenReturn(Optional.ofNullable(recolte));
+        when(productRepository.findById(id)).thenReturn(Optional.ofNullable(product));
+        when(extractionRepository.findById(product.getExtraction().getId())).thenReturn(Optional.ofNullable(extraction));
+        when(recolteRepository.findById(extraction.getRecoltes().get(0).getId())).thenReturn(Optional.ofNullable(recolte));
         when(rucheRepository.findById(recolte.getRuche().getId())).thenReturn(null);
 
         //ACT & ASSERT
@@ -136,13 +138,15 @@ class TracabiliteServiceTest {
     void getTracabiliteServiceNullRucher() throws ParseException {
         //ARRANGE
         Long id = 79L;
-        ProductMiel product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L);
-        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L);
+        Product product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L, "20270525", LocalDate.of(2027,05,25), LocalDate.of(2025,05,25));
+        Extraction extraction = jeuxDonnee.getNewExtraction(5L, LocalDate.of(2025,05,25), "printemps 2025", 500L, 20L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L, 20L);
         Ruche ruche = jeuxDonnee.getNewRuche(55L, "#55", "Noir", "Dadant");
 
         //Mock
-        when(productMielRepository.findById(id)).thenReturn(Optional.ofNullable(product));
-        when(recolteRepository.findById(product.getRecolte().getId())).thenReturn(Optional.ofNullable(recolte));
+        when(productRepository.findById(id)).thenReturn(Optional.ofNullable(product));
+        when(extractionRepository.findById(product.getExtraction().getId())).thenReturn(Optional.ofNullable(extraction));
+        when(recolteRepository.findById(extraction.getRecoltes().get(0).getId())).thenReturn(Optional.ofNullable(recolte));
         when(rucheRepository.findById(recolte.getRuche().getId())).thenReturn(Optional.ofNullable(ruche));
         when(rucherRepository.findById(ruche.getRucher().getId())).thenReturn(null);
 
@@ -156,14 +160,16 @@ class TracabiliteServiceTest {
     void getTracabiliteServiceNullApiculteur() throws ParseException {
         //ARRANGE
         Long id = 79L;
-        ProductMiel product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L);
-        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L);
+        Product product = jeuxDonnee.getNewProduct(79L, 7.50, 500L, 1000L, 780L, "20270525", LocalDate.of(2027,05,25), LocalDate.of(2025,05,25));
+        Extraction extraction = jeuxDonnee.getNewExtraction(5L, LocalDate.of(2025,05,25), "printemps 2025", 500L, 20L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(9L, "Printemps", LocalDate.of(2023, 5, 20), 500L, 20L);
         Ruche ruche = jeuxDonnee.getNewRuche(55L, "#55", "Noir", "Dadant");
         Rucher rucher = jeuxDonnee.getNewRucher(3L, "Rucher du petit bois", "Bois");
 
         //Mock
-        when(productMielRepository.findById(id)).thenReturn(Optional.ofNullable(product));
-        when(recolteRepository.findById(product.getRecolte().getId())).thenReturn(Optional.ofNullable(recolte));
+        when(productRepository.findById(id)).thenReturn(Optional.ofNullable(product));
+        when(extractionRepository.findById(product.getExtraction().getId())).thenReturn(Optional.ofNullable(extraction));
+        when(recolteRepository.findById(extraction.getRecoltes().get(0).getId())).thenReturn(Optional.ofNullable(recolte));
         when(rucheRepository.findById(recolte.getRuche().getId())).thenReturn(Optional.ofNullable(ruche));
         when(rucherRepository.findById(ruche.getRucher().getId())).thenReturn(Optional.ofNullable(rucher));
         when(apiculteurRepository.findById(rucher.getApiculteur().getId())).thenReturn(null);

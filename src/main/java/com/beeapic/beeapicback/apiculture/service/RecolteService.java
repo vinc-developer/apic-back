@@ -19,6 +19,7 @@ public class RecolteService implements RecolteInterface {
 
     /**
      * Persiste une recolte
+     *
      * @param recolte
      * @return Recolte
      */
@@ -28,21 +29,23 @@ public class RecolteService implements RecolteInterface {
 
     /**
      * Map et retourne une recolte
+     *
      * @param id
      * @return RecolteDto
      */
     public RecolteDto getRecolte(Long id) {
-        Recolte recolte = recolteRepository.findById(id).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Recolte recolte = recolteRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return mapperRecolte(recolte);
     }
 
     /**
      * mapper pour retourner un dto
+     *
      * @param recolte
      * @return RecolteDto
      */
     private RecolteDto mapperRecolte(Recolte recolte) {
-        if(recolte == null) return null;
-        return new RecolteDto(recolte.getId(), recolte.getName(), recolte.getRecoltedate(), recolte.getRecoltekg(), recolte.getRuche().getId());
+        if (recolte == null) return null;
+        return new RecolteDto(recolte.getId(), recolte.getNomMieler(), recolte.getDateRecolte(), recolte.getQteRecolte(), recolte.getQteHausseRecolte(), recolte.getRuche().getId(), recolte.getExtraction().getId());
     }
 }

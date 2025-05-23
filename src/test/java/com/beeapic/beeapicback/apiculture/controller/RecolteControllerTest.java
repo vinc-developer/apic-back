@@ -56,7 +56,7 @@ class RecolteControllerTest {
         //ARRANGE
         Long id = 10L;
         //MOCK
-        when(recolteService.getRecolte(id)).thenReturn(jeuxDonnee.getRecolteDto(id,"printemps", LocalDate.of(2024, 6, 27), 25L, 2L));
+        when(recolteService.getRecolte(id)).thenReturn(jeuxDonnee.getRecolteDto(id,"printemps", LocalDate.of(2024, 6, 27), 25L, 2L, 1L, 2L));
         //ACT & ASSERT
         mvc.perform(MockMvcRequestBuilders
                 .get("/apiculture/recolte/{id}", id)
@@ -89,7 +89,7 @@ class RecolteControllerTest {
     @Test
     void createRecolteAPI() throws Exception {
         //ARRANGE
-        Recolte recolte = jeuxDonnee.getNewRecolte(0L, "printemps", LocalDate.of(2024, 6, 27), 25L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(0L, "printemps", LocalDate.of(2024, 6, 27), 25L, 2L);
         Recolte recolteRetour = recolte;
         recolteRetour.setId(9L);
 
@@ -112,7 +112,7 @@ class RecolteControllerTest {
     @Test
     void createRecolteAPIKO() throws Exception {
         //ARRANGE
-        Recolte recolte = jeuxDonnee.getNewRecolte(0L, "printemps", LocalDate.of(2024, 6, 27), 25L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(0L, "printemps", LocalDate.of(2024, 6, 27), 25L, 2L);
 
         String jsonBody = objectMapper.writeValueAsString(recolte);
 

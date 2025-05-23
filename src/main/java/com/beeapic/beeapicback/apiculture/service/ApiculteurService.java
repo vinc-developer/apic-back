@@ -19,6 +19,7 @@ public class ApiculteurService implements ApiculteurInterface {
 
     /**
      * Map et retourne un apiculteur
+     *
      * @param id
      * @return ApiculteurDto
      */
@@ -29,6 +30,7 @@ public class ApiculteurService implements ApiculteurInterface {
 
     /**
      * Persiste un apiculteur avec le repo
+     *
      * @param apiculteur
      * @return Apiculteur
      */
@@ -38,13 +40,13 @@ public class ApiculteurService implements ApiculteurInterface {
 
     /**
      * Mapper pour retourner un objet DTO
+     *
      * @param apiculteur
      * @return ApiculteurDto
      */
-    private ApiculteurDto mapperApiculteur(Apiculteur apiculteur){
-        if(apiculteur == null) return null;
+    private ApiculteurDto mapperApiculteur(Apiculteur apiculteur) {
+        if (apiculteur == null) return null;
         return new ApiculteurDto(apiculteur.getId(), apiculteur.getLastname(), apiculteur.getFirstname(),
-                apiculteur.getSiret(), apiculteur.getNapi(), apiculteur.getEmail(), apiculteur.getTelephone(),
-                apiculteur.getPassword(), apiculteur.getAdresse());
+                apiculteur.getSiret(), apiculteur.getNapi(), apiculteur.getEmail(), apiculteur.getTelephone(), apiculteur.getAdresse());
     }
 }

@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +47,7 @@ class ApiculteurServiceTest {
     }
 
     @Test
-    void getApiculteur() {
+    void getApiculteur() throws ParseException {
         //MOCK
         when(apiculteurRepository.findById(1L)).thenReturn(Optional.ofNullable(jeuxDonnee.getNewApiculteur()));
         //ACT

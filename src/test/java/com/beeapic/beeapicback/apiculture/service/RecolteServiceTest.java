@@ -36,7 +36,7 @@ class RecolteServiceTest {
     @Test
     void createRecolte() throws ParseException {
         //ARRANGE
-        Recolte recolte = jeuxDonnee.getNewRecolte(9L,"été", LocalDate.of(2024, 6, 27),40L);
+        Recolte recolte = jeuxDonnee.getNewRecolte(9L,"été", LocalDate.of(2024, 6, 27),40L, 2L);
         //MOCK
         when(recolteRepository.save(any(Recolte.class))).thenReturn(recolte);
         //ACT
@@ -49,11 +49,11 @@ class RecolteServiceTest {
     @Test
     void getRecolte() throws ParseException {
         //MOCK
-        when(recolteRepository.findById(9L)).thenReturn(Optional.of(jeuxDonnee.getNewRecolte(9L,"été", LocalDate.of(2024, 6, 27),40L)));
+        when(recolteRepository.findById(9L)).thenReturn(Optional.of(jeuxDonnee.getNewRecolte(9L,"été", LocalDate.of(2024, 6, 27),40L, 2L)));
         //ACT
         RecolteDto result = sut.getRecolte(9L);
         //ASSERT
-        assertEquals(result.getName(), "été");
+        assertEquals(result.getNomMieler(), "été");
     }
 
     @Test

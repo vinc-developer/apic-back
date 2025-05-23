@@ -23,6 +23,7 @@ public class RucheController {
 
     /**
      * Api @Post Création d'un ruche
+     *
      * @param ruche
      * @return Ruche
      */
@@ -38,6 +39,7 @@ public class RucheController {
 
     /**
      * Api @Get Récupération d'une ruche
+     *
      * @param id
      * @return RucheDto
      */
@@ -50,4 +52,13 @@ public class RucheController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la récupération des données.");
         }
     }
+
+    //modifier une ruche avec possibiliter de changer de rucher
+
+    // supprimer une ruche
+
+    // recuperer toutes les ruches d'un apiculteur
+
+    // recuperer toutes les ruches d'un rucher
+
 }

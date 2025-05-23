@@ -1,18 +1,15 @@
 package com.beeapic.beeapicback.tracabilite.service;
 
-import com.beeapic.beeapicback.apiculture.dto.ApiculteurDto;
-import com.beeapic.beeapicback.apiculture.dto.RecolteDto;
-import com.beeapic.beeapicback.apiculture.dto.RucheDto;
-import com.beeapic.beeapicback.apiculture.dto.RucherDto;
-import com.beeapic.beeapicback.apiculture.interfaces.ApiculteurInterface;
-import com.beeapic.beeapicback.apiculture.interfaces.RecolteInterface;
-import com.beeapic.beeapicback.apiculture.interfaces.RucheInterface;
-import com.beeapic.beeapicback.apiculture.interfaces.RucherInterface;
+import com.beeapic.beeapicback.apiculture.dto.*;
+import com.beeapic.beeapicback.apiculture.interfaces.*;
+import com.beeapic.beeapicback.commerce.dto.ProductDto;
 import com.beeapic.beeapicback.exception.ResourceNotFoundException;
 import com.beeapic.beeapicback.tracabilite.dto.TracabiliteDto;
-import com.beeapic.beeapicback.vente.dto.ProductMielDto;
-import com.beeapic.beeapicback.vente.interfaces.ProductInterface;
+import com.beeapic.beeapicback.commerce.interfaces.ProductInterface;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TracabiliteService {
@@ -22,27 +19,31 @@ public class TracabiliteService {
     private final RecolteInterface recolteInterface;
     private final RucheInterface rucheInterface;
     private final RucherInterface rucherInterface;
+    private final ExtractionInterface extractionInterface;
 
     public TracabiliteService(ProductInterface productInterface, ApiculteurInterface apiculteurInterface,
                               RecolteInterface recolteInterface, RucheInterface rucheInterface,
-                              RucherInterface rucherInterface) {
+                              RucherInterface rucherInterface, ExtractionInterface extractionInterface) {
         this.productInterface = productInterface;
         this.apiculteurInterface = apiculteurInterface;
         this.recolteInterface = recolteInterface;
         this.rucheInterface = rucheInterface;
         this.rucherInterface = rucherInterface;
+        this.extractionInterface = extractionInterface;
     }
 
     /**
      * Retourne la tracabilité d'un produit en faisasnt appel aux interfaces
+     *
      * @param id d'un produit
      * @return TracabiliteDto
      */
     public TracabiliteDto getTracabilites(Long id) {
-        ProductMielDto product = new ProductMielDto();
-        RecolteDto recolte = new RecolteDto();
-        RucheDto ruche = new RucheDto();
-        RucherDto rucher = new RucherDto();
+        ProductDto product = new ProductDto();
+        ExtractionDto extraction = new ExtractionDto();
+        List<RecolteDto> recoltes = new ArrayList<>();
+        List<RucheDto> ruches = new ArrayList<>();
+        List<RucherDto> ruchers = new ArrayList<>();
         ApiculteurDto apiculteur = new ApiculteurDto();
 
         try {
@@ -51,35 +52,26 @@ public class TracabiliteService {
                 throw new ResourceNotFoundException("Produit non trouvé !");
             }
 
-            recolte = recolteInterface.getRecolte(product.getRecolteId());
-            if (recolte == null) {
-                throw new ResourceNotFoundException("Recolte non trouvé !");
-            }
+            extraction = extractionInterface.getExtraction(product.getExtractionId());
 
-            ruche = rucheInterface.getRuche(recolte.getRucheId());
-            if (ruche == null) {
-                throw new ResourceNotFoundException("Ruche non trouvé !");
-            }
+            extraction.getRecoltes().forEach(r -> recoltes.add(recolteInterface.getRecolte(r.getId())));
+            recoltes.forEach(r -> ruches.add(rucheInterface.getRuche(r.getRucheId())));
+            ruches.forEach(r -> ruchers.add(rucherInterface.getRucher(r.getRucherId())));
 
-            rucher = rucherInterface.getRucher(ruche.getRucherId());
-            if (rucher == null) {
-                throw new ResourceNotFoundException("Rucher non trouvé !");
-            }
-
-            apiculteur = apiculteurInterface.getApiculteur(rucher.getApiculteurId());
+            apiculteur = apiculteurInterface.getApiculteur(ruchers.get(0).getApiculteurId());
             if (apiculteur == null) {
                 throw new ResourceNotFoundException("Apiculteur non trouvé !");
             }
         } catch (ResourceNotFoundException e) {
-            // Gérer d'autres exceptions générales
             e.printStackTrace();
         }
 
         TracabiliteDto tracabiliteDto = new TracabiliteDto();
         tracabiliteDto.setProduct(product);
-        tracabiliteDto.setRecolte(recolte);
-        tracabiliteDto.setRuche(ruche);
-        tracabiliteDto.setRucher(rucher);
+        tracabiliteDto.setRecoltes(recoltes);
+        tracabiliteDto.setExtraction(extraction);
+        tracabiliteDto.setRuches(ruches);
+        tracabiliteDto.setRuchers(ruchers);
         tracabiliteDto.setApiculteur(apiculteur);
 
         return tracabiliteDto;

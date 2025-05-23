@@ -22,6 +22,7 @@ public class TracabiliteController {
 
     /**
      * Api @Get qui retourne la tracabilite d'un produit
+     *
      * @param id
      * @return TracabiliteDto
      */

@@ -18,7 +18,6 @@ public class ApiculteurDto {
     private String napi;
     private String email;
     private String telephone;
-    private String password;
     private Adresse adresse;
 
 }

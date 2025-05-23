@@ -19,6 +19,7 @@ public class RucherService implements RucherInterface {
 
     /**
      * persiste un rucher
+     *
      * @param rucher
      * @return Rucher
      */
@@ -28,6 +29,7 @@ public class RucherService implements RucherInterface {
 
     /**
      * Recupere et map un rucher
+     *
      * @param id
      * @return RucherDto
      */
@@ -38,11 +40,12 @@ public class RucherService implements RucherInterface {
 
     /**
      * permet de modifier un objet en dto
+     *
      * @param rucher
      * @return RucherDto
      */
     private RucherDto mapperRucher(Rucher rucher) {
-        if(rucher == null) return null;
+        if (rucher == null) return null;
         return new RucherDto(rucher.getId(), rucher.getName(), rucher.getEnvironnement(), rucher.getAdresse(), rucher.getApiculteur().getId());
     }
 }

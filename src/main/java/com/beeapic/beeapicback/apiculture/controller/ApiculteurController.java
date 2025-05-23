@@ -21,6 +21,7 @@ public class ApiculteurController {
 
     /**
      * Api @Get Recupère un apiculteur par son id
+     *
      * @param id
      * @return ApiculteurDto
      */
@@ -36,6 +37,7 @@ public class ApiculteurController {
 
     /**
      * Api @Post Création d'un apiculteur
+     *
      * @param apiculteur
      * @return Apiculteur
      */
@@ -48,4 +50,8 @@ public class ApiculteurController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur c'est produite durant la création des données.");
         }
     }
+
+    // Modifier apiculteur
+
+    // supprimer apiculteur ( supprime tout)
 }

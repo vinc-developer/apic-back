@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class RucherServiceTest {
     }
 
     @Test
-    void createRucher() {
+    void createRucher() throws ParseException {
         //ARRANGE
         Rucher rucher = jeuxDonnee.getNewRucher(5L, "Petit bois", "foret");
         //MOCK
@@ -46,7 +47,7 @@ class RucherServiceTest {
     }
 
     @Test
-    void getRucher() {
+    void getRucher() throws ParseException {
         //MOCK
         when(rucherRepository.findById(5L)).thenReturn(Optional.ofNullable(jeuxDonnee.getNewRucher(5L, "petit bois", "foret")));
         //ACT

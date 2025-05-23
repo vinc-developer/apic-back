@@ -19,15 +19,17 @@ public class RucheService implements RucheInterface {
 
     /**
      * persiste une ruche
+     *
      * @param ruche
      * @return Ruche
      */
     public Ruche createRuche(Ruche ruche) {
-        return  rucheRepository.save(ruche);
+        return rucheRepository.save(ruche);
     }
 
     /**
      * récupere et retourner un objet ruche mapper
+     *
      * @param id
      * @return RucheDto
      */
@@ -39,11 +41,12 @@ public class RucheService implements RucheInterface {
 
     /**
      * mapper pour retourner un objet unique
+     *
      * @param ruche
      * @return RucheDto
      */
     private RucheDto mapperRuche(Ruche ruche) {
-        if(ruche == null) return null;
+        if (ruche == null) return null;
         return new RucheDto(ruche.getId(), ruche.getName(), ruche.getTyperuche(), ruche.getBeetype(), ruche.getRucher().getId());
     }
 }
